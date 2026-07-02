@@ -4,7 +4,7 @@ This directory contains the core backend server for BalanceRay. It is built usin
 
 ## Tech Stack & Architecture
 
-* **Language:** Go (1.22+)
+* **Language:** Go (1.25+)
 * **API Layer:** GraphQL via `gqlgen` (Schema-first approach)
 * **Database Layer:** PostgreSQL with `sqlc` for compile-time safe, raw SQL query generation
 * **Performance:** Custom batch DataLoaders to eliminate $N+1$ query issues across polymorph interfaces

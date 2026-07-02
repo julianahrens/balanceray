@@ -1,0 +1,47 @@
+scalar Decimal
+
+enum AssetClass {
+  STOCK
+  ETF
+}
+
+interface Asset {
+  id: ID!
+  symbol: String!
+  name: String!
+  currency: String!
+  assetClass: AssetClass!
+  livePrice: Decimal!
+}
+
+type EtfHolding {
+  asset: Asset!
+  percentage: Decimal!
+}
+
+# Struktur für die geografische Allokation
+type EtfCountryAllocation {
+  countryCode: String!
+  percentage: Decimal!
+}
+
+type SecurityAsset implements Asset {
+  id: ID!
+  symbol: String!
+  name: String!
+  currency: String!
+  assetClass: AssetClass!
+  livePrice: Decimal!
+  isin: String
+  wkn: String
+  issuer: String
+  providerProductId: String
+  # assetClass == ETF
+  holdings: [EtfHolding!]!
+  countries: [EtfCountryAllocation!]!
+}
+
+type Query {
+  assets: [Asset!]!
+}
+
