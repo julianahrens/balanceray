@@ -292,3 +292,19 @@ func (q *Queries) ListAllAssetsWithExtensions(ctx context.Context) ([]ListAllAss
 	}
 	return items, nil
 }
+
+const updateAssetPrice = `-- name: UpdateAssetPrice :exec
+UPDATE assets
+SET live_price = $2, updated_at = NOW()
+WHERE id = $1
+`
+
+type UpdateAssetPriceParams struct {
+	ID        uuid.UUID      `json:"id"`
+	LivePrice scalar.Decimal `json:"live_price"`
+}
+
+func (q *Queries) UpdateAssetPrice(ctx context.Context, arg UpdateAssetPriceParams) error {
+	_, err := q.db.ExecContext(ctx, updateAssetPrice, arg.ID, arg.LivePrice)
+	return err
+}

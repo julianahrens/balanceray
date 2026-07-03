@@ -52,3 +52,8 @@ FROM assets a
          LEFT JOIN assets_stock s ON a.id = s.asset_id AND a.asset_class = 'STOCK'
          LEFT JOIN assets_etf e ON a.id = e.asset_id AND a.asset_class = 'ETF'
 ORDER BY a.name ASC;
+
+-- name: UpdateAssetPrice :exec
+UPDATE assets
+SET live_price = $2, updated_at = NOW()
+WHERE id = $1;

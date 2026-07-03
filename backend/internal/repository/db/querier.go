@@ -21,6 +21,7 @@ type Querier interface {
 	// should be loaded lazily or via batching to keep this initial query fast.
 	ListAllAssets(ctx context.Context) ([]Asset, error)
 	ListAllAssetsWithExtensions(ctx context.Context) ([]ListAllAssetsWithExtensionsRow, error)
+	UpdateAssetPrice(ctx context.Context, arg UpdateAssetPriceParams) error
 }
 
 var _ Querier = (*Queries)(nil)
