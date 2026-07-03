@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jilio/gqlgen-scalars/scalar"
 )
 
 const createBaseAsset = `-- name: CreateBaseAsset :one
@@ -23,11 +24,11 @@ INSERT INTO assets (
 `
 
 type CreateBaseAssetParams struct {
-	Symbol     string     `json:"symbol"`
-	Name       string     `json:"name"`
-	Currency   string     `json:"currency"`
-	AssetClass AssetClass `json:"asset_class"`
-	LivePrice  string     `json:"live_price"`
+	Symbol     string         `json:"symbol"`
+	Name       string         `json:"name"`
+	Currency   string         `json:"currency"`
+	AssetClass AssetClass     `json:"asset_class"`
+	LivePrice  scalar.Decimal `json:"live_price"`
 }
 
 func (q *Queries) CreateBaseAsset(ctx context.Context, arg CreateBaseAssetParams) (Asset, error) {

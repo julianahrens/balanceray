@@ -10,3 +10,13 @@ sql:
         emit_json_tags: true
         emit_prepared_queries: false
         emit_interface: true
+        overrides:
+          - db_type: "numeric"
+            nullable: true
+            go_type: "github.com/shopspring/decimal.Decimal"
+          - column: "assets.live_price"
+            go_type: "github.com/jilio/gqlgen-scalars/scalar.Decimal"
+          - column: "etf_asset_holdings.percentage"
+            go_type: "github.com/jilio/gqlgen-scalars/scalar.Decimal"
+          - column: "etf_country_allocations.percentage"
+            go_type: "github.com/jilio/gqlgen-scalars/scalar.Decimal"

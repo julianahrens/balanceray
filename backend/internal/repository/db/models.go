@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jilio/gqlgen-scalars/scalar"
 )
 
 type AssetClass string
@@ -56,13 +57,13 @@ func (ns NullAssetClass) Value() (driver.Value, error) {
 }
 
 type Asset struct {
-	ID         uuid.UUID  `json:"id"`
-	Symbol     string     `json:"symbol"`
-	Name       string     `json:"name"`
-	Currency   string     `json:"currency"`
-	AssetClass AssetClass `json:"asset_class"`
-	LivePrice  string     `json:"live_price"`
-	UpdatedAt  time.Time  `json:"updated_at"`
+	ID         uuid.UUID      `json:"id"`
+	Symbol     string         `json:"symbol"`
+	Name       string         `json:"name"`
+	Currency   string         `json:"currency"`
+	AssetClass AssetClass     `json:"asset_class"`
+	LivePrice  scalar.Decimal `json:"live_price"`
+	UpdatedAt  time.Time      `json:"updated_at"`
 }
 
 type AssetsEtf struct {
@@ -82,15 +83,15 @@ type AssetsStock struct {
 }
 
 type EtfAssetHolding struct {
-	EtfAssetID     uuid.UUID `json:"etf_asset_id"`
-	HoldingAssetID uuid.UUID `json:"holding_asset_id"`
-	Percentage     string    `json:"percentage"`
+	EtfAssetID     uuid.UUID      `json:"etf_asset_id"`
+	HoldingAssetID uuid.UUID      `json:"holding_asset_id"`
+	Percentage     scalar.Decimal `json:"percentage"`
 }
 
 type EtfCountryAllocation struct {
-	EtfAssetID  uuid.UUID `json:"etf_asset_id"`
-	CountryCode string    `json:"country_code"`
-	Percentage  string    `json:"percentage"`
+	EtfAssetID  uuid.UUID      `json:"etf_asset_id"`
+	CountryCode string         `json:"country_code"`
+	Percentage  scalar.Decimal `json:"percentage"`
 }
 
 type HistoricalPrice struct {

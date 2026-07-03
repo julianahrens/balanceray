@@ -11,8 +11,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/julianahrens/balanceraybackend/internal/graph"
-	"github.com/julianahrens/balanceraybackend/internal/repository/db"
+	"github.com/julianahrens/balanceray/backend/internal/graph"
+	"github.com/julianahrens/balanceray/backend/internal/repository/db"
+	"github.com/julianahrens/balanceray/backend/internal/services"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	_ "github.com/lib/pq"
@@ -28,9 +29,19 @@ func main() {
 	}
 	defer conn.Close()
 
-	// Migrationen vollautomatisch beim Start ausführen
 	if err := db.RunMigrations(conn); err != nil {
 		log.Fatalf("Could not run database migrations: %v", err)
+	}
+
+	// 1. Initialize store
+	store := db.NewStore(conn)
+
+	// 2. Initialize domain services
+	assetService := services.NewAssetService(conn, store)
+
+	// 3. Inject services into the central GraphQL Resolver struct
+	resolver := &graph.Resolver{
+		AssetService: assetService,
 	}
 
 	port := os.Getenv("PORT")
@@ -38,7 +49,7 @@ func main() {
 		port = defaultPort
 	}
 
-	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
 
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})

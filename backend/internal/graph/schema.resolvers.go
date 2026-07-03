@@ -9,12 +9,64 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/julianahrens/balanceraybackend/internal/graph/model"
+	"github.com/julianahrens/balanceray/backend/internal/graph/model"
+	"github.com/julianahrens/balanceray/backend/internal/repository/db"
 )
 
 // CreateAsset is the resolver for the createAsset field.
 func (r *mutationResolver) CreateAsset(ctx context.Context, input model.CreateAssetInput) (model.Asset, error) {
-	panic(fmt.Errorf("not implemented: CreateAsset - createAsset"))
+	// 1. Call our transaction-safe Service Layer
+	dbAsset, err := r.Resolver.AssetService.CreateAsset(ctx, input)
+	if err != nil {
+		// GraphQL execution error returned safely to the SvelteKit frontend
+		return nil, fmt.Errorf("failed to create asset: %w", err)
+	}
+
+	// 2. Fetch the specific extension from DB to fulfill the full GraphQL type contract
+	switch dbAsset.AssetClass {
+	case db.AssetClassSTOCK:
+		stockExt, err := r.Resolver.AssetService.GetStockExtension(ctx, dbAsset.ID)
+		if err != nil {
+			return nil, fmt.Errorf("failed to retrieve stock details: %w", err)
+		}
+
+		return &model.StockAsset{
+			ID:          dbAsset.ID,
+			Symbol:      dbAsset.Symbol,
+			Name:        dbAsset.Name,
+			Currency:    dbAsset.Currency,
+			AssetClass:  model.AssetClassStock,
+			LivePrice:   dbAsset.LivePrice,
+			Isin:        nullStringToPointer(stockExt.Isin),
+			Wkn:         nullStringToPointer(stockExt.Wkn),
+			Issuer:      nullStringToPointer(stockExt.Issuer),
+			CountryCode: stockExt.CountryCode,
+		}, nil
+
+	case db.AssetClassETF:
+		etfExt, err := r.Resolver.AssetService.GetEtfExtension(ctx, dbAsset.ID)
+		if err != nil {
+			return nil, fmt.Errorf("failed to retrieve etf details: %w", err)
+		}
+
+		return &model.EtfAsset{
+			ID:                dbAsset.ID,
+			Symbol:            dbAsset.Symbol,
+			Name:              dbAsset.Name,
+			Currency:          dbAsset.Currency,
+			AssetClass:        model.AssetClassEtf,
+			LivePrice:         dbAsset.LivePrice,
+			Isin:              nullStringToPointer(etfExt.Isin),
+			Wkn:               nullStringToPointer(etfExt.Wkn),
+			Issuer:            nullStringToPointer(etfExt.Issuer),
+			ProviderProductID: nullStringToPointer(etfExt.ProviderProductID),
+			Holdings:          []*model.EtfHolding{},           // Empty baseline for a fresh asset
+			Countries:         []*model.EtfCountryAllocation{}, // Empty baseline for a fresh asset
+		}, nil
+
+	default:
+		return nil, fmt.Errorf("unknown asset class type inside database")
+	}
 }
 
 // Assets is the resolver for the assets field.

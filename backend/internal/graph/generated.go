@@ -16,7 +16,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/google/uuid"
 	"github.com/jilio/gqlgen-scalars/scalar"
-	"github.com/julianahrens/balanceraybackend/internal/graph/model"
+	"github.com/julianahrens/balanceray/backend/internal/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -631,7 +631,7 @@ func (ec *executionContext) field_Mutation_createAsset_args(ctx context.Context,
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (model.CreateAssetInput, error) {
-			return ec.unmarshalNCreateAssetInput2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐCreateAssetInput(ctx, v)
+			return ec.unmarshalNCreateAssetInput2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐCreateAssetInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -833,7 +833,7 @@ func (ec *executionContext) _EtfAsset_assetClass(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.AssetClass) graphql.Marshaler {
-			return ec.marshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx, selections, v)
+			return ec.marshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx, selections, v)
 		},
 		true,
 		true,
@@ -879,7 +879,7 @@ func (ec *executionContext) _EtfAsset_priceHistory(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.HistoricalPricePoint) graphql.Marshaler {
-			return ec.marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePointᚄ(ctx, selections, v)
+			return ec.marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePointᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -1014,7 +1014,7 @@ func (ec *executionContext) _EtfAsset_holdings(ctx context.Context, field graphq
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.EtfHolding) graphql.Marshaler {
-			return ec.marshalNEtfHolding2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfHoldingᚄ(ctx, selections, v)
+			return ec.marshalNEtfHolding2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐEtfHoldingᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -1046,7 +1046,7 @@ func (ec *executionContext) _EtfAsset_countries(ctx context.Context, field graph
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.EtfCountryAllocation) graphql.Marshaler {
-			return ec.marshalNEtfCountryAllocation2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocationᚄ(ctx, selections, v)
+			return ec.marshalNEtfCountryAllocation2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocationᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -1124,7 +1124,7 @@ func (ec *executionContext) _EtfHolding_asset(ctx context.Context, field graphql
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.Asset) graphql.Marshaler {
-			return ec.marshalNAsset2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAsset(ctx, selections, v)
+			return ec.marshalNAsset2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAsset(ctx, selections, v)
 		},
 		true,
 		true,
@@ -1295,7 +1295,7 @@ func (ec *executionContext) _Mutation_createAsset(ctx context.Context, field gra
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.Asset) graphql.Marshaler {
-			return ec.marshalNAsset2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAsset(ctx, selections, v)
+			return ec.marshalNAsset2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAsset(ctx, selections, v)
 		},
 		true,
 		true,
@@ -1338,7 +1338,7 @@ func (ec *executionContext) _Query_assets(ctx context.Context, field graphql.Col
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []model.Asset) graphql.Marshaler {
-			return ec.marshalNAsset2ᚕgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAssetᚄ(ctx, selections, v)
+			return ec.marshalNAsset2ᚕgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAssetᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -1538,7 +1538,7 @@ func (ec *executionContext) _StockAsset_assetClass(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.AssetClass) graphql.Marshaler {
-			return ec.marshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx, selections, v)
+			return ec.marshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx, selections, v)
 		},
 		true,
 		true,
@@ -1584,7 +1584,7 @@ func (ec *executionContext) _StockAsset_priceHistory(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.HistoricalPricePoint) graphql.Marshaler {
-			return ec.marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePointᚄ(ctx, selections, v)
+			return ec.marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePointᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -2806,7 +2806,7 @@ func (ec *executionContext) unmarshalInputCreateAssetInput(ctx context.Context, 
 			it.Currency = data
 		case "assetClass":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assetClass"))
-			data, err := ec.unmarshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx, v)
+			data, err := ec.unmarshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3733,7 +3733,7 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAsset2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAsset(ctx context.Context, sel ast.SelectionSet, v model.Asset) graphql.Marshaler {
+func (ec *executionContext) marshalNAsset2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAsset(ctx context.Context, sel ast.SelectionSet, v model.Asset) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -3743,11 +3743,11 @@ func (ec *executionContext) marshalNAsset2githubᚗcomᚋjulianahrensᚋbalancer
 	return ec._Asset(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAsset2ᚕgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAssetᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Asset) graphql.Marshaler {
+func (ec *executionContext) marshalNAsset2ᚕgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAssetᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Asset) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNAsset2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAsset(ctx, sel, v[i])
+		return ec.marshalNAsset2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAsset(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -3759,13 +3759,13 @@ func (ec *executionContext) marshalNAsset2ᚕgithubᚗcomᚋjulianahrensᚋbalan
 	return ret
 }
 
-func (ec *executionContext) unmarshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx context.Context, v any) (model.AssetClass, error) {
+func (ec *executionContext) unmarshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx context.Context, v any) (model.AssetClass, error) {
 	var res model.AssetClass
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx context.Context, sel ast.SelectionSet, v model.AssetClass) graphql.Marshaler {
+func (ec *executionContext) marshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx context.Context, sel ast.SelectionSet, v model.AssetClass) graphql.Marshaler {
 	return v
 }
 
@@ -3785,7 +3785,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNCreateAssetInput2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐCreateAssetInput(ctx context.Context, v any) (model.CreateAssetInput, error) {
+func (ec *executionContext) unmarshalNCreateAssetInput2githubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐCreateAssetInput(ctx context.Context, v any) (model.CreateAssetInput, error) {
 	res, err := ec.unmarshalInputCreateAssetInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -3800,11 +3800,11 @@ func (ec *executionContext) marshalNDecimal2githubᚗcomᚋjilioᚋgqlgenᚑscal
 	return v
 }
 
-func (ec *executionContext) marshalNEtfCountryAllocation2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocationᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EtfCountryAllocation) graphql.Marshaler {
+func (ec *executionContext) marshalNEtfCountryAllocation2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocationᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EtfCountryAllocation) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNEtfCountryAllocation2ᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocation(ctx, sel, v[i])
+		return ec.marshalNEtfCountryAllocation2ᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocation(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -3816,7 +3816,7 @@ func (ec *executionContext) marshalNEtfCountryAllocation2ᚕᚖgithubᚗcomᚋju
 	return ret
 }
 
-func (ec *executionContext) marshalNEtfCountryAllocation2ᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocation(ctx context.Context, sel ast.SelectionSet, v *model.EtfCountryAllocation) graphql.Marshaler {
+func (ec *executionContext) marshalNEtfCountryAllocation2ᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocation(ctx context.Context, sel ast.SelectionSet, v *model.EtfCountryAllocation) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -3826,11 +3826,11 @@ func (ec *executionContext) marshalNEtfCountryAllocation2ᚖgithubᚗcomᚋjulia
 	return ec._EtfCountryAllocation(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEtfHolding2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfHoldingᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EtfHolding) graphql.Marshaler {
+func (ec *executionContext) marshalNEtfHolding2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐEtfHoldingᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EtfHolding) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNEtfHolding2ᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfHolding(ctx, sel, v[i])
+		return ec.marshalNEtfHolding2ᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐEtfHolding(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -3842,7 +3842,7 @@ func (ec *executionContext) marshalNEtfHolding2ᚕᚖgithubᚗcomᚋjulianahrens
 	return ret
 }
 
-func (ec *executionContext) marshalNEtfHolding2ᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfHolding(ctx context.Context, sel ast.SelectionSet, v *model.EtfHolding) graphql.Marshaler {
+func (ec *executionContext) marshalNEtfHolding2ᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐEtfHolding(ctx context.Context, sel ast.SelectionSet, v *model.EtfHolding) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -3852,11 +3852,11 @@ func (ec *executionContext) marshalNEtfHolding2ᚖgithubᚗcomᚋjulianahrensᚋ
 	return ec._EtfHolding(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePointᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.HistoricalPricePoint) graphql.Marshaler {
+func (ec *executionContext) marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePointᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.HistoricalPricePoint) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNHistoricalPricePoint2ᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePoint(ctx, sel, v[i])
+		return ec.marshalNHistoricalPricePoint2ᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePoint(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -3868,7 +3868,7 @@ func (ec *executionContext) marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋju
 	return ret
 }
 
-func (ec *executionContext) marshalNHistoricalPricePoint2ᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePoint(ctx context.Context, sel ast.SelectionSet, v *model.HistoricalPricePoint) graphql.Marshaler {
+func (ec *executionContext) marshalNHistoricalPricePoint2ᚖgithubᚗcomᚋjulianahrensᚋbalancerayᚋbackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePoint(ctx context.Context, sel ast.SelectionSet, v *model.HistoricalPricePoint) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	sqldir "github.com/julianahrens/balanceraybackend/sql"
+	sqldir "github.com/julianahrens/balanceray/backend/sql"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"

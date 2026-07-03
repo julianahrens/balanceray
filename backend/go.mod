@@ -1,4 +1,4 @@
-module github.com/julianahrens/balanceraybackend
+module github.com/julianahrens/balanceray/backend
 
 go 1.25.0
 
@@ -10,6 +10,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/jilio/gqlgen-scalars v0.3.0
 	github.com/lib/pq v1.12.3
+	github.com/shopspring/decimal v1.4.0
 	github.com/vektah/gqlparser/v2 v2.5.36
 )
 
@@ -21,7 +22,6 @@ require (
 	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/holiman/uint256 v1.3.2 // indirect
-	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/urfave/cli/v3 v3.10.1 // indirect
 	golang.org/x/mod v0.37.0 // indirect
