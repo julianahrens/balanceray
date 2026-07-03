@@ -23,6 +23,18 @@ type Asset interface {
 	GetPriceHistory() []*HistoricalPricePoint
 }
 
+type CreateAssetInput struct {
+	Symbol            string     `json:"symbol"`
+	Name              string     `json:"name"`
+	Currency          string     `json:"currency"`
+	AssetClass        AssetClass `json:"assetClass"`
+	Isin              *string    `json:"isin,omitempty"`
+	Wkn               *string    `json:"wkn,omitempty"`
+	Issuer            *string    `json:"issuer,omitempty"`
+	CountryCode       *string    `json:"countryCode,omitempty"`
+	ProviderProductID *string    `json:"providerProductId,omitempty"`
+}
+
 type EtfAsset struct {
 	ID                uuid.UUID               `json:"id"`
 	Symbol            string                  `json:"symbol"`
@@ -73,6 +85,9 @@ type HistoricalPricePoint struct {
 	High  scalar.Decimal `json:"high"`
 	Low   scalar.Decimal `json:"low"`
 	Close scalar.Decimal `json:"close"`
+}
+
+type Mutation struct {
 }
 
 type Query struct {

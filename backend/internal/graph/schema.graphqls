@@ -80,6 +80,34 @@ type EtfAsset implements Asset {
   countries: [EtfCountryAllocation!]!
 }
 
+# ----------------------------------------------------------------------
+# INPUTS & WRITE-OPERATIONS (Mutations)
+# ----------------------------------------------------------------------
+
+# Unified input for registering new assets from the UI
+input CreateAssetInput {
+  symbol: String!
+  name: String!
+  currency: String!
+  assetClass: AssetClass!
+
+  # Shared Security fields
+  isin: String
+  wkn: String
+  issuer: String
+
+  # Stock-specific field (Required if assetClass == STOCK)
+  countryCode: String
+
+  # ETF-specific field (Optional, used by the background scraper)
+  providerProductId: String
+}
+
 type Query {
   assets: [Asset!]!
+}
+
+type Mutation {
+  # Registers a new asset and returns the polymorphic interface
+  createAsset(input: CreateAssetInput!): Asset!
 }

@@ -12,12 +12,23 @@ import (
 	"github.com/julianahrens/balanceraybackend/internal/graph/model"
 )
 
+// CreateAsset is the resolver for the createAsset field.
+func (r *mutationResolver) CreateAsset(ctx context.Context, input model.CreateAssetInput) (model.Asset, error) {
+	panic(fmt.Errorf("not implemented: CreateAsset - createAsset"))
+}
+
 // Assets is the resolver for the assets field.
 func (r *queryResolver) Assets(ctx context.Context) ([]model.Asset, error) {
 	panic(fmt.Errorf("not implemented: Assets - assets"))
 }
 
+// Mutation returns MutationResolver implementation.
+func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-type queryResolver struct{ *Resolver }
+type (
+	mutationResolver struct{ *Resolver }
+	queryResolver    struct{ *Resolver }
+)
