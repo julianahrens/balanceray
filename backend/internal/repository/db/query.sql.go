@@ -224,3 +224,71 @@ func (q *Queries) ListAllAssets(ctx context.Context) ([]Asset, error) {
 	}
 	return items, nil
 }
+
+const listAllAssetsWithExtensions = `-- name: ListAllAssetsWithExtensions :many
+SELECT
+    a.id, a.symbol, a.name, a.currency, a.asset_class, a.live_price, a.updated_at,
+    s.isin AS stock_isin, s.wkn AS stock_wkn, s.issuer AS stock_issuer, s.country_code,
+    e.isin AS etf_isin, e.wkn AS etf_wkn, e.issuer AS etf_issuer, e.provider_product_id
+FROM assets a
+         LEFT JOIN assets_stock s ON a.id = s.asset_id AND a.asset_class = 'STOCK'
+         LEFT JOIN assets_etf e ON a.id = e.asset_id AND a.asset_class = 'ETF'
+ORDER BY a.name ASC
+`
+
+type ListAllAssetsWithExtensionsRow struct {
+	ID                uuid.UUID      `json:"id"`
+	Symbol            string         `json:"symbol"`
+	Name              string         `json:"name"`
+	Currency          string         `json:"currency"`
+	AssetClass        AssetClass     `json:"asset_class"`
+	LivePrice         scalar.Decimal `json:"live_price"`
+	UpdatedAt         time.Time      `json:"updated_at"`
+	StockIsin         sql.NullString `json:"stock_isin"`
+	StockWkn          sql.NullString `json:"stock_wkn"`
+	StockIssuer       sql.NullString `json:"stock_issuer"`
+	CountryCode       sql.NullString `json:"country_code"`
+	EtfIsin           sql.NullString `json:"etf_isin"`
+	EtfWkn            sql.NullString `json:"etf_wkn"`
+	EtfIssuer         sql.NullString `json:"etf_issuer"`
+	ProviderProductID sql.NullString `json:"provider_product_id"`
+}
+
+func (q *Queries) ListAllAssetsWithExtensions(ctx context.Context) ([]ListAllAssetsWithExtensionsRow, error) {
+	rows, err := q.db.QueryContext(ctx, listAllAssetsWithExtensions)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListAllAssetsWithExtensionsRow
+	for rows.Next() {
+		var i ListAllAssetsWithExtensionsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Symbol,
+			&i.Name,
+			&i.Currency,
+			&i.AssetClass,
+			&i.LivePrice,
+			&i.UpdatedAt,
+			&i.StockIsin,
+			&i.StockWkn,
+			&i.StockIssuer,
+			&i.CountryCode,
+			&i.EtfIsin,
+			&i.EtfWkn,
+			&i.EtfIssuer,
+			&i.ProviderProductID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

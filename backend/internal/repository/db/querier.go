@@ -20,6 +20,7 @@ type Querier interface {
 	// Fetches the core fields of all assets. The extensions (Stock/ETF details)
 	// should be loaded lazily or via batching to keep this initial query fast.
 	ListAllAssets(ctx context.Context) ([]Asset, error)
+	ListAllAssetsWithExtensions(ctx context.Context) ([]ListAllAssetsWithExtensionsRow, error)
 }
 
 var _ Querier = (*Queries)(nil)

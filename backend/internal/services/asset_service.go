@@ -108,6 +108,10 @@ func (s *AssetService) GetEtfExtension(ctx context.Context, id uuid.UUID) (db.As
 	return s.store.GetEtfExtensionByAssetID(ctx, id)
 }
 
+func (s *AssetService) ListAllAssets(ctx context.Context) ([]db.ListAllAssetsWithExtensionsRow, error) {
+	return s.store.ListAllAssetsWithExtensions(ctx)
+}
+
 // Small inline helper to safely handle optional GraphQL strings (*string -> string)
 func derefString(s *string) string {
 	if s == nil {

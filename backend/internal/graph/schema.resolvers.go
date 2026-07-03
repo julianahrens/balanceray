@@ -71,7 +71,50 @@ func (r *mutationResolver) CreateAsset(ctx context.Context, input model.CreateAs
 
 // Assets is the resolver for the assets field.
 func (r *queryResolver) Assets(ctx context.Context) ([]model.Asset, error) {
-	panic(fmt.Errorf("not implemented: Assets - assets"))
+	// 1. Fetch all assets and their core extensions via a single flat JOIN
+	rows, err := r.Resolver.AssetService.ListAllAssets(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch assets list: %w", err)
+	}
+
+	result := make([]model.Asset, len(rows))
+
+	// 2. Map the flat database rows back into the GraphQL Interface array
+	for i, row := range rows {
+		switch row.AssetClass {
+		case db.AssetClassSTOCK:
+			result[i] = &model.StockAsset{
+				ID:          row.ID,
+				Symbol:      row.Symbol,
+				Name:        row.Name,
+				Currency:    row.Currency,
+				AssetClass:  model.AssetClassStock,
+				LivePrice:   row.LivePrice,
+				Isin:        nullStringToPointer(row.StockIsin),
+				Wkn:         nullStringToPointer(row.StockWkn),
+				Issuer:      nullStringToPointer(row.StockIssuer),
+				CountryCode: row.CountryCode.String, // .String safe due to core JOIN logic
+			}
+
+		case db.AssetClassETF:
+			result[i] = &model.EtfAsset{
+				ID:                row.ID,
+				Symbol:            row.Symbol,
+				Name:              row.Name,
+				Currency:          row.Currency,
+				AssetClass:        model.AssetClassEtf,
+				LivePrice:         row.LivePrice,
+				Isin:              nullStringToPointer(row.EtfIsin),
+				Wkn:               nullStringToPointer(row.EtfWkn),
+				Issuer:            nullStringToPointer(row.EtfIssuer),
+				ProviderProductID: nullStringToPointer(row.ProviderProductID),
+				Holdings:          []*model.EtfHolding{},           // Lazy loaded later via data loader if queried
+				Countries:         []*model.EtfCountryAllocation{}, // Lazy loaded later via data loader if queried
+			}
+		}
+	}
+
+	return result, nil
 }
 
 // Mutation returns MutationResolver implementation.

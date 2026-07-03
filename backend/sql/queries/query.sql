@@ -42,3 +42,13 @@ SELECT asset_id, price_date, open_price, high_price, low_price, close_price
 FROM historical_prices
 WHERE asset_id = $1 AND price_date >= $2
 ORDER BY price_date DESC;
+
+-- name: ListAllAssetsWithExtensions :many
+SELECT
+    a.id, a.symbol, a.name, a.currency, a.asset_class, a.live_price, a.updated_at,
+    s.isin AS stock_isin, s.wkn AS stock_wkn, s.issuer AS stock_issuer, s.country_code,
+    e.isin AS etf_isin, e.wkn AS etf_wkn, e.issuer AS etf_issuer, e.provider_product_id
+FROM assets a
+         LEFT JOIN assets_stock s ON a.id = s.asset_id AND a.asset_class = 'STOCK'
+         LEFT JOIN assets_etf e ON a.id = e.asset_id AND a.asset_class = 'ETF'
+ORDER BY a.name ASC;
