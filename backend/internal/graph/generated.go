@@ -14,6 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/google/uuid"
 	"github.com/jilio/gqlgen-scalars/scalar"
 	"github.com/julianahrens/balanceraybackend/internal/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
@@ -37,6 +38,21 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	EtfAsset struct {
+		AssetClass        func(childComplexity int) int
+		Countries         func(childComplexity int) int
+		Currency          func(childComplexity int) int
+		Holdings          func(childComplexity int) int
+		ID                func(childComplexity int) int
+		Isin              func(childComplexity int) int
+		Issuer            func(childComplexity int) int
+		LivePrice         func(childComplexity int) int
+		Name              func(childComplexity int) int
+		ProviderProductID func(childComplexity int) int
+		Symbol            func(childComplexity int) int
+		Wkn               func(childComplexity int) int
+	}
+
 	EtfCountryAllocation struct {
 		CountryCode func(childComplexity int) int
 		Percentage  func(childComplexity int) int
@@ -51,19 +67,17 @@ type ComplexityRoot struct {
 		Assets func(childComplexity int) int
 	}
 
-	SecurityAsset struct {
-		AssetClass        func(childComplexity int) int
-		Countries         func(childComplexity int) int
-		Currency          func(childComplexity int) int
-		Holdings          func(childComplexity int) int
-		ID                func(childComplexity int) int
-		Isin              func(childComplexity int) int
-		Issuer            func(childComplexity int) int
-		LivePrice         func(childComplexity int) int
-		Name              func(childComplexity int) int
-		ProviderProductID func(childComplexity int) int
-		Symbol            func(childComplexity int) int
-		Wkn               func(childComplexity int) int
+	StockAsset struct {
+		AssetClass  func(childComplexity int) int
+		CountryCode func(childComplexity int) int
+		Currency    func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Isin        func(childComplexity int) int
+		Issuer      func(childComplexity int) int
+		LivePrice   func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Symbol      func(childComplexity int) int
+		Wkn         func(childComplexity int) int
 	}
 }
 
@@ -92,6 +106,79 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	ec := newExecutionContext(nil, e, nil)
 	_ = ec
 	switch typeName + "." + field {
+
+	case "EtfAsset.assetClass":
+		if e.ComplexityRoot.EtfAsset.AssetClass == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.AssetClass(childComplexity), true
+	case "EtfAsset.countries":
+		if e.ComplexityRoot.EtfAsset.Countries == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.Countries(childComplexity), true
+	case "EtfAsset.currency":
+		if e.ComplexityRoot.EtfAsset.Currency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.Currency(childComplexity), true
+	case "EtfAsset.holdings":
+		if e.ComplexityRoot.EtfAsset.Holdings == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.Holdings(childComplexity), true
+	case "EtfAsset.id":
+		if e.ComplexityRoot.EtfAsset.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.ID(childComplexity), true
+	case "EtfAsset.isin":
+		if e.ComplexityRoot.EtfAsset.Isin == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.Isin(childComplexity), true
+	case "EtfAsset.issuer":
+		if e.ComplexityRoot.EtfAsset.Issuer == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.Issuer(childComplexity), true
+	case "EtfAsset.livePrice":
+		if e.ComplexityRoot.EtfAsset.LivePrice == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.LivePrice(childComplexity), true
+	case "EtfAsset.name":
+		if e.ComplexityRoot.EtfAsset.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.Name(childComplexity), true
+	case "EtfAsset.providerProductId":
+		if e.ComplexityRoot.EtfAsset.ProviderProductID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.ProviderProductID(childComplexity), true
+	case "EtfAsset.symbol":
+		if e.ComplexityRoot.EtfAsset.Symbol == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.Symbol(childComplexity), true
+	case "EtfAsset.wkn":
+		if e.ComplexityRoot.EtfAsset.Wkn == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EtfAsset.Wkn(childComplexity), true
 
 	case "EtfCountryAllocation.countryCode":
 		if e.ComplexityRoot.EtfCountryAllocation.CountryCode == nil {
@@ -126,78 +213,66 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.Assets(childComplexity), true
 
-	case "SecurityAsset.assetClass":
-		if e.ComplexityRoot.SecurityAsset.AssetClass == nil {
+	case "StockAsset.assetClass":
+		if e.ComplexityRoot.StockAsset.AssetClass == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.AssetClass(childComplexity), true
-	case "SecurityAsset.countries":
-		if e.ComplexityRoot.SecurityAsset.Countries == nil {
+		return e.ComplexityRoot.StockAsset.AssetClass(childComplexity), true
+	case "StockAsset.countryCode":
+		if e.ComplexityRoot.StockAsset.CountryCode == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.Countries(childComplexity), true
-	case "SecurityAsset.currency":
-		if e.ComplexityRoot.SecurityAsset.Currency == nil {
+		return e.ComplexityRoot.StockAsset.CountryCode(childComplexity), true
+	case "StockAsset.currency":
+		if e.ComplexityRoot.StockAsset.Currency == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.Currency(childComplexity), true
-	case "SecurityAsset.holdings":
-		if e.ComplexityRoot.SecurityAsset.Holdings == nil {
+		return e.ComplexityRoot.StockAsset.Currency(childComplexity), true
+	case "StockAsset.id":
+		if e.ComplexityRoot.StockAsset.ID == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.Holdings(childComplexity), true
-	case "SecurityAsset.id":
-		if e.ComplexityRoot.SecurityAsset.ID == nil {
+		return e.ComplexityRoot.StockAsset.ID(childComplexity), true
+	case "StockAsset.isin":
+		if e.ComplexityRoot.StockAsset.Isin == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.ID(childComplexity), true
-	case "SecurityAsset.isin":
-		if e.ComplexityRoot.SecurityAsset.Isin == nil {
+		return e.ComplexityRoot.StockAsset.Isin(childComplexity), true
+	case "StockAsset.issuer":
+		if e.ComplexityRoot.StockAsset.Issuer == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.Isin(childComplexity), true
-	case "SecurityAsset.issuer":
-		if e.ComplexityRoot.SecurityAsset.Issuer == nil {
+		return e.ComplexityRoot.StockAsset.Issuer(childComplexity), true
+	case "StockAsset.livePrice":
+		if e.ComplexityRoot.StockAsset.LivePrice == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.Issuer(childComplexity), true
-	case "SecurityAsset.livePrice":
-		if e.ComplexityRoot.SecurityAsset.LivePrice == nil {
+		return e.ComplexityRoot.StockAsset.LivePrice(childComplexity), true
+	case "StockAsset.name":
+		if e.ComplexityRoot.StockAsset.Name == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.LivePrice(childComplexity), true
-	case "SecurityAsset.name":
-		if e.ComplexityRoot.SecurityAsset.Name == nil {
+		return e.ComplexityRoot.StockAsset.Name(childComplexity), true
+	case "StockAsset.symbol":
+		if e.ComplexityRoot.StockAsset.Symbol == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.Name(childComplexity), true
-	case "SecurityAsset.providerProductId":
-		if e.ComplexityRoot.SecurityAsset.ProviderProductID == nil {
+		return e.ComplexityRoot.StockAsset.Symbol(childComplexity), true
+	case "StockAsset.wkn":
+		if e.ComplexityRoot.StockAsset.Wkn == nil {
 			break
 		}
 
-		return e.ComplexityRoot.SecurityAsset.ProviderProductID(childComplexity), true
-	case "SecurityAsset.symbol":
-		if e.ComplexityRoot.SecurityAsset.Symbol == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SecurityAsset.Symbol(childComplexity), true
-	case "SecurityAsset.wkn":
-		if e.ComplexityRoot.SecurityAsset.Wkn == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SecurityAsset.Wkn(childComplexity), true
+		return e.ComplexityRoot.StockAsset.Wkn(childComplexity), true
 
 	}
 	return 0, false
@@ -495,6 +570,300 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
+func (ec *executionContext) _EtfAsset_id(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
+			return ec.marshalNUUID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type UUID does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_symbol(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_symbol(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Symbol, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_symbol(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_name(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_name(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_currency(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_currency(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Currency, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_currency(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_assetClass(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_assetClass(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AssetClass, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v model.AssetClass) graphql.Marshaler {
+			return ec.marshalNAssetClass2githubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐAssetClass(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_assetClass(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type AssetClass does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_livePrice(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_livePrice(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LivePrice, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v scalar.Decimal) graphql.Marshaler {
+			return ec.marshalNDecimal2githubᚗcomᚋjilioᚋgqlgenᚑscalarsᚋscalarᚐDecimal(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_livePrice(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type Decimal does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_isin(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_isin(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Isin, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_isin(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_wkn(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_wkn(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Wkn, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_wkn(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_issuer(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_issuer(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Issuer, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_issuer(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_providerProductId(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_providerProductId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ProviderProductID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_providerProductId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_holdings(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_holdings(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Holdings, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.EtfHolding) graphql.Marshaler {
+			return ec.marshalNEtfHolding2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfHoldingᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_holdings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EtfAsset",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_EtfHolding(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EtfAsset_countries(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_countries(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Countries, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.EtfCountryAllocation) graphql.Marshaler {
+			return ec.marshalNEtfCountryAllocation2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocationᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_countries(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EtfAsset",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_EtfCountryAllocation(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _EtfCountryAllocation_countryCode(ctx context.Context, field graphql.CollectedField, obj *model.EtfCountryAllocation) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -704,36 +1073,36 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _SecurityAsset_id(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_id(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_id(ctx, field)
+			return ec.fieldContext_StockAsset_id(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
 			return obj.ID, nil
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalNID2string(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
+			return ec.marshalNUUID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, selections, v)
 		},
 		true,
 		true,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type ID does not have child fields"))
+func (ec *executionContext) fieldContext_StockAsset_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type UUID does not have child fields"))
 }
 
-func (ec *executionContext) _SecurityAsset_symbol(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_symbol(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_symbol(ctx, field)
+			return ec.fieldContext_StockAsset_symbol(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
 			return obj.Symbol, nil
@@ -746,17 +1115,17 @@ func (ec *executionContext) _SecurityAsset_symbol(ctx context.Context, field gra
 		true,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_symbol(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type String does not have child fields"))
+func (ec *executionContext) fieldContext_StockAsset_symbol(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _SecurityAsset_name(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_name(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_name(ctx, field)
+			return ec.fieldContext_StockAsset_name(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
 			return obj.Name, nil
@@ -769,17 +1138,17 @@ func (ec *executionContext) _SecurityAsset_name(ctx context.Context, field graph
 		true,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type String does not have child fields"))
+func (ec *executionContext) fieldContext_StockAsset_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _SecurityAsset_currency(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_currency(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_currency(ctx, field)
+			return ec.fieldContext_StockAsset_currency(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
 			return obj.Currency, nil
@@ -792,17 +1161,17 @@ func (ec *executionContext) _SecurityAsset_currency(ctx context.Context, field g
 		true,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_currency(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type String does not have child fields"))
+func (ec *executionContext) fieldContext_StockAsset_currency(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _SecurityAsset_assetClass(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_assetClass(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_assetClass(ctx, field)
+			return ec.fieldContext_StockAsset_assetClass(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
 			return obj.AssetClass, nil
@@ -815,17 +1184,17 @@ func (ec *executionContext) _SecurityAsset_assetClass(ctx context.Context, field
 		true,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_assetClass(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type AssetClass does not have child fields"))
+func (ec *executionContext) fieldContext_StockAsset_assetClass(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type AssetClass does not have child fields"))
 }
 
-func (ec *executionContext) _SecurityAsset_livePrice(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_livePrice(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_livePrice(ctx, field)
+			return ec.fieldContext_StockAsset_livePrice(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
 			return obj.LivePrice, nil
@@ -838,17 +1207,17 @@ func (ec *executionContext) _SecurityAsset_livePrice(ctx context.Context, field 
 		true,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_livePrice(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type Decimal does not have child fields"))
+func (ec *executionContext) fieldContext_StockAsset_livePrice(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type Decimal does not have child fields"))
 }
 
-func (ec *executionContext) _SecurityAsset_isin(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_isin(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_isin(ctx, field)
+			return ec.fieldContext_StockAsset_isin(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
 			return obj.Isin, nil
@@ -861,17 +1230,17 @@ func (ec *executionContext) _SecurityAsset_isin(ctx context.Context, field graph
 		false,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_isin(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type String does not have child fields"))
+func (ec *executionContext) fieldContext_StockAsset_isin(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _SecurityAsset_wkn(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_wkn(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_wkn(ctx, field)
+			return ec.fieldContext_StockAsset_wkn(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
 			return obj.Wkn, nil
@@ -884,17 +1253,17 @@ func (ec *executionContext) _SecurityAsset_wkn(ctx context.Context, field graphq
 		false,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_wkn(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type String does not have child fields"))
+func (ec *executionContext) fieldContext_StockAsset_wkn(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _SecurityAsset_issuer(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_issuer(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_issuer(ctx, field)
+			return ec.fieldContext_StockAsset_issuer(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
 			return obj.Issuer, nil
@@ -907,95 +1276,31 @@ func (ec *executionContext) _SecurityAsset_issuer(ctx context.Context, field gra
 		false,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_issuer(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type String does not have child fields"))
+func (ec *executionContext) fieldContext_StockAsset_issuer(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _SecurityAsset_providerProductId(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
+func (ec *executionContext) _StockAsset_countryCode(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_providerProductId(ctx, field)
+			return ec.fieldContext_StockAsset_countryCode(ctx, field)
 		},
 		func(ctx context.Context) (any, error) {
-			return obj.ProviderProductID, nil
+			return obj.CountryCode, nil
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOString2ᚖstring(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_SecurityAsset_providerProductId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SecurityAsset", field, false, false, errors.New("field of type String does not have child fields"))
-}
-
-func (ec *executionContext) _SecurityAsset_holdings(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_holdings(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Holdings, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []*model.EtfHolding) graphql.Marshaler {
-			return ec.marshalNEtfHolding2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfHoldingᚄ(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
 		},
 		true,
 		true,
 	)
 }
-func (ec *executionContext) fieldContext_SecurityAsset_holdings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SecurityAsset",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_EtfHolding(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _SecurityAsset_countries(ctx context.Context, field graphql.CollectedField, obj *model.SecurityAsset) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SecurityAsset_countries(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Countries, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []*model.EtfCountryAllocation) graphql.Marshaler {
-			return ec.marshalNEtfCountryAllocation2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐEtfCountryAllocationᚄ(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_SecurityAsset_countries(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SecurityAsset",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_EtfCountryAllocation(ctx, field)
-		},
-	}
-	return fc, nil
+func (ec *executionContext) fieldContext_StockAsset_countryCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -2065,13 +2370,20 @@ func (ec *executionContext) _Asset(ctx context.Context, sel ast.SelectionSet, ob
 	switch obj := (obj).(type) {
 	case nil:
 		return graphql.Null
-	case model.SecurityAsset:
-		return ec._SecurityAsset(ctx, sel, &obj)
-	case *model.SecurityAsset:
+	case model.StockAsset:
+		return ec._StockAsset(ctx, sel, &obj)
+	case *model.StockAsset:
 		if obj == nil {
 			return graphql.Null
 		}
-		return ec._SecurityAsset(ctx, sel, obj)
+		return ec._StockAsset(ctx, sel, obj)
+	case model.EtfAsset:
+		return ec._EtfAsset(ctx, sel, &obj)
+	case *model.EtfAsset:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._EtfAsset(ctx, sel, obj)
 	default:
 		if typedObj, ok := obj.(graphql.Marshaler); ok {
 			return typedObj
@@ -2084,6 +2396,99 @@ func (ec *executionContext) _Asset(ctx context.Context, sel ast.SelectionSet, ob
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var etfAssetImplementors = []string{"EtfAsset", "Asset"}
+
+func (ec *executionContext) _EtfAsset(ctx context.Context, sel ast.SelectionSet, obj *model.EtfAsset) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, etfAssetImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EtfAsset")
+		case "id":
+			out.Values[i] = ec._EtfAsset_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "symbol":
+			out.Values[i] = ec._EtfAsset_symbol(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._EtfAsset_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "currency":
+			out.Values[i] = ec._EtfAsset_currency(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "assetClass":
+			out.Values[i] = ec._EtfAsset_assetClass(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "livePrice":
+			out.Values[i] = ec._EtfAsset_livePrice(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isin":
+			out.Values[i] = ec._EtfAsset_isin(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "wkn":
+			out.Values[i] = ec._EtfAsset_wkn(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "issuer":
+			out.Values[i] = ec._EtfAsset_issuer(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "providerProductId":
+			out.Values[i] = ec._EtfAsset_providerProductId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "holdings":
+			out.Values[i] = ec._EtfAsset_holdings(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countries":
+			out.Values[i] = ec._EtfAsset_countries(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
 
 var etfCountryAllocationImplementors = []string{"EtfCountryAllocation"}
 
@@ -2248,10 +2653,10 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
-var securityAssetImplementors = []string{"SecurityAsset", "Asset"}
+var stockAssetImplementors = []string{"StockAsset", "Asset"}
 
-func (ec *executionContext) _SecurityAsset(ctx context.Context, sel ast.SelectionSet, obj *model.SecurityAsset) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, securityAssetImplementors)
+func (ec *executionContext) _StockAsset(ctx context.Context, sel ast.SelectionSet, obj *model.StockAsset) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, stockAssetImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferredFieldSet := graphql.NewFieldSet(nil)
@@ -2259,64 +2664,54 @@ func (ec *executionContext) _SecurityAsset(ctx context.Context, sel ast.Selectio
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("SecurityAsset")
+			out.Values[i] = graphql.MarshalString("StockAsset")
 		case "id":
-			out.Values[i] = ec._SecurityAsset_id(ctx, field, obj)
+			out.Values[i] = ec._StockAsset_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "symbol":
-			out.Values[i] = ec._SecurityAsset_symbol(ctx, field, obj)
+			out.Values[i] = ec._StockAsset_symbol(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "name":
-			out.Values[i] = ec._SecurityAsset_name(ctx, field, obj)
+			out.Values[i] = ec._StockAsset_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "currency":
-			out.Values[i] = ec._SecurityAsset_currency(ctx, field, obj)
+			out.Values[i] = ec._StockAsset_currency(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "assetClass":
-			out.Values[i] = ec._SecurityAsset_assetClass(ctx, field, obj)
+			out.Values[i] = ec._StockAsset_assetClass(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "livePrice":
-			out.Values[i] = ec._SecurityAsset_livePrice(ctx, field, obj)
+			out.Values[i] = ec._StockAsset_livePrice(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "isin":
-			out.Values[i] = ec._SecurityAsset_isin(ctx, field, obj)
+			out.Values[i] = ec._StockAsset_isin(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
 		case "wkn":
-			out.Values[i] = ec._SecurityAsset_wkn(ctx, field, obj)
+			out.Values[i] = ec._StockAsset_wkn(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
 		case "issuer":
-			out.Values[i] = ec._SecurityAsset_issuer(ctx, field, obj)
+			out.Values[i] = ec._StockAsset_issuer(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
-		case "providerProductId":
-			out.Values[i] = ec._SecurityAsset_providerProductId(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "holdings":
-			out.Values[i] = ec._SecurityAsset_holdings(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "countries":
-			out.Values[i] = ec._SecurityAsset_countries(ctx, field, obj)
+		case "countryCode":
+			out.Values[i] = ec._StockAsset_countryCode(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -2847,22 +3242,6 @@ func (ec *executionContext) marshalNEtfHolding2ᚖgithubᚗcomᚋjulianahrensᚋ
 	return ec._EtfHolding(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNID2string(ctx context.Context, v any) (string, error) {
-	res, err := graphql.UnmarshalID(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	_ = sel
-	res := graphql.MarshalID(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
-}
-
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -2871,6 +3250,22 @@ func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) 
 func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNUUID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx context.Context, v any) (uuid.UUID, error) {
+	res, err := graphql.UnmarshalUUID(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNUUID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalUUID(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

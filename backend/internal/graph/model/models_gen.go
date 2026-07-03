@@ -8,18 +8,42 @@ import (
 	"io"
 	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/jilio/gqlgen-scalars/scalar"
 )
 
 type Asset interface {
 	IsAsset()
-	GetID() string
+	GetID() uuid.UUID
 	GetSymbol() string
 	GetName() string
 	GetCurrency() string
 	GetAssetClass() AssetClass
 	GetLivePrice() scalar.Decimal
 }
+
+type EtfAsset struct {
+	ID                uuid.UUID               `json:"id"`
+	Symbol            string                  `json:"symbol"`
+	Name              string                  `json:"name"`
+	Currency          string                  `json:"currency"`
+	AssetClass        AssetClass              `json:"assetClass"`
+	LivePrice         scalar.Decimal          `json:"livePrice"`
+	Isin              *string                 `json:"isin,omitempty"`
+	Wkn               *string                 `json:"wkn,omitempty"`
+	Issuer            *string                 `json:"issuer,omitempty"`
+	ProviderProductID *string                 `json:"providerProductId,omitempty"`
+	Holdings          []*EtfHolding           `json:"holdings"`
+	Countries         []*EtfCountryAllocation `json:"countries"`
+}
+
+func (EtfAsset) IsAsset()                          {}
+func (this EtfAsset) GetID() uuid.UUID             { return this.ID }
+func (this EtfAsset) GetSymbol() string            { return this.Symbol }
+func (this EtfAsset) GetName() string              { return this.Name }
+func (this EtfAsset) GetCurrency() string          { return this.Currency }
+func (this EtfAsset) GetAssetClass() AssetClass    { return this.AssetClass }
+func (this EtfAsset) GetLivePrice() scalar.Decimal { return this.LivePrice }
 
 type EtfCountryAllocation struct {
 	CountryCode string         `json:"countryCode"`
@@ -34,28 +58,26 @@ type EtfHolding struct {
 type Query struct {
 }
 
-type SecurityAsset struct {
-	ID                string                  `json:"id"`
-	Symbol            string                  `json:"symbol"`
-	Name              string                  `json:"name"`
-	Currency          string                  `json:"currency"`
-	AssetClass        AssetClass              `json:"assetClass"`
-	LivePrice         scalar.Decimal          `json:"livePrice"`
-	Isin              *string                 `json:"isin,omitempty"`
-	Wkn               *string                 `json:"wkn,omitempty"`
-	Issuer            *string                 `json:"issuer,omitempty"`
-	ProviderProductID *string                 `json:"providerProductId,omitempty"`
-	Holdings          []*EtfHolding           `json:"holdings"`
-	Countries         []*EtfCountryAllocation `json:"countries"`
+type StockAsset struct {
+	ID          uuid.UUID      `json:"id"`
+	Symbol      string         `json:"symbol"`
+	Name        string         `json:"name"`
+	Currency    string         `json:"currency"`
+	AssetClass  AssetClass     `json:"assetClass"`
+	LivePrice   scalar.Decimal `json:"livePrice"`
+	Isin        *string        `json:"isin,omitempty"`
+	Wkn         *string        `json:"wkn,omitempty"`
+	Issuer      *string        `json:"issuer,omitempty"`
+	CountryCode string         `json:"countryCode"`
 }
 
-func (SecurityAsset) IsAsset()                          {}
-func (this SecurityAsset) GetID() string                { return this.ID }
-func (this SecurityAsset) GetSymbol() string            { return this.Symbol }
-func (this SecurityAsset) GetName() string              { return this.Name }
-func (this SecurityAsset) GetCurrency() string          { return this.Currency }
-func (this SecurityAsset) GetAssetClass() AssetClass    { return this.AssetClass }
-func (this SecurityAsset) GetLivePrice() scalar.Decimal { return this.LivePrice }
+func (StockAsset) IsAsset()                          {}
+func (this StockAsset) GetID() uuid.UUID             { return this.ID }
+func (this StockAsset) GetSymbol() string            { return this.Symbol }
+func (this StockAsset) GetName() string              { return this.Name }
+func (this StockAsset) GetCurrency() string          { return this.Currency }
+func (this StockAsset) GetAssetClass() AssetClass    { return this.AssetClass }
+func (this StockAsset) GetLivePrice() scalar.Decimal { return this.LivePrice }
 
 type AssetClass string
 
