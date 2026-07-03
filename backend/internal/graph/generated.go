@@ -48,6 +48,7 @@ type ComplexityRoot struct {
 		Issuer            func(childComplexity int) int
 		LivePrice         func(childComplexity int) int
 		Name              func(childComplexity int) int
+		PriceHistory      func(childComplexity int, timeframe string) int
 		ProviderProductID func(childComplexity int) int
 		Symbol            func(childComplexity int) int
 		Wkn               func(childComplexity int) int
@@ -63,21 +64,30 @@ type ComplexityRoot struct {
 		Percentage func(childComplexity int) int
 	}
 
+	HistoricalPricePoint struct {
+		Close func(childComplexity int) int
+		Date  func(childComplexity int) int
+		High  func(childComplexity int) int
+		Low   func(childComplexity int) int
+		Open  func(childComplexity int) int
+	}
+
 	Query struct {
 		Assets func(childComplexity int) int
 	}
 
 	StockAsset struct {
-		AssetClass  func(childComplexity int) int
-		CountryCode func(childComplexity int) int
-		Currency    func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Isin        func(childComplexity int) int
-		Issuer      func(childComplexity int) int
-		LivePrice   func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Symbol      func(childComplexity int) int
-		Wkn         func(childComplexity int) int
+		AssetClass   func(childComplexity int) int
+		CountryCode  func(childComplexity int) int
+		Currency     func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Isin         func(childComplexity int) int
+		Issuer       func(childComplexity int) int
+		LivePrice    func(childComplexity int) int
+		Name         func(childComplexity int) int
+		PriceHistory func(childComplexity int, timeframe string) int
+		Symbol       func(childComplexity int) int
+		Wkn          func(childComplexity int) int
 	}
 }
 
@@ -161,6 +171,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EtfAsset.Name(childComplexity), true
+	case "EtfAsset.priceHistory":
+		if e.ComplexityRoot.EtfAsset.PriceHistory == nil {
+			break
+		}
+
+		args, err := ec.field_EtfAsset_priceHistory_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.EtfAsset.PriceHistory(childComplexity, args["timeframe"].(string)), true
 	case "EtfAsset.providerProductId":
 		if e.ComplexityRoot.EtfAsset.ProviderProductID == nil {
 			break
@@ -205,6 +226,37 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EtfHolding.Percentage(childComplexity), true
+
+	case "HistoricalPricePoint.close":
+		if e.ComplexityRoot.HistoricalPricePoint.Close == nil {
+			break
+		}
+
+		return e.ComplexityRoot.HistoricalPricePoint.Close(childComplexity), true
+	case "HistoricalPricePoint.date":
+		if e.ComplexityRoot.HistoricalPricePoint.Date == nil {
+			break
+		}
+
+		return e.ComplexityRoot.HistoricalPricePoint.Date(childComplexity), true
+	case "HistoricalPricePoint.high":
+		if e.ComplexityRoot.HistoricalPricePoint.High == nil {
+			break
+		}
+
+		return e.ComplexityRoot.HistoricalPricePoint.High(childComplexity), true
+	case "HistoricalPricePoint.low":
+		if e.ComplexityRoot.HistoricalPricePoint.Low == nil {
+			break
+		}
+
+		return e.ComplexityRoot.HistoricalPricePoint.Low(childComplexity), true
+	case "HistoricalPricePoint.open":
+		if e.ComplexityRoot.HistoricalPricePoint.Open == nil {
+			break
+		}
+
+		return e.ComplexityRoot.HistoricalPricePoint.Open(childComplexity), true
 
 	case "Query.assets":
 		if e.ComplexityRoot.Query.Assets == nil {
@@ -261,6 +313,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.StockAsset.Name(childComplexity), true
+	case "StockAsset.priceHistory":
+		if e.ComplexityRoot.StockAsset.PriceHistory == nil {
+			break
+		}
+
+		args, err := ec.field_StockAsset_priceHistory_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.StockAsset.PriceHistory(childComplexity, args["timeframe"].(string)), true
 	case "StockAsset.symbol":
 		if e.ComplexityRoot.StockAsset.Symbol == nil {
 			break
@@ -380,6 +443,22 @@ func (ec *executionContext) childFields_EtfHolding(ctx context.Context, field gr
 	return nil, fmt.Errorf("no field named %q was found under type EtfHolding", field.Name)
 }
 
+func (ec *executionContext) childFields_HistoricalPricePoint(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "date":
+		return ec.fieldContext_HistoricalPricePoint_date(ctx, field)
+	case "open":
+		return ec.fieldContext_HistoricalPricePoint_open(ctx, field)
+	case "high":
+		return ec.fieldContext_HistoricalPricePoint_high(ctx, field)
+	case "low":
+		return ec.fieldContext_HistoricalPricePoint_low(ctx, field)
+	case "close":
+		return ec.fieldContext_HistoricalPricePoint_close(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type HistoricalPricePoint", field.Name)
+}
+
 func (ec *executionContext) childFields___Directive(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "name":
@@ -496,6 +575,20 @@ func (ec *executionContext) childFields___Type(ctx context.Context, field graphq
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_EtfAsset_priceHistory_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "timeframe",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["timeframe"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -507,6 +600,20 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		return nil, err
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_StockAsset_priceHistory_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "timeframe",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["timeframe"] = arg0
 	return args, nil
 }
 
@@ -706,6 +813,49 @@ func (ec *executionContext) _EtfAsset_livePrice(ctx context.Context, field graph
 }
 func (ec *executionContext) fieldContext_EtfAsset_livePrice(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("EtfAsset", field, false, false, errors.New("field of type Decimal does not have child fields"))
+}
+
+func (ec *executionContext) _EtfAsset_priceHistory(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EtfAsset_priceHistory(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PriceHistory, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.HistoricalPricePoint) graphql.Marshaler {
+			return ec.marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePointᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EtfAsset_priceHistory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EtfAsset",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_HistoricalPricePoint(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_EtfAsset_priceHistory_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
 }
 
 func (ec *executionContext) _EtfAsset_isin(ctx context.Context, field graphql.CollectedField, obj *model.EtfAsset) (ret graphql.Marshaler) {
@@ -965,6 +1115,121 @@ func (ec *executionContext) fieldContext_EtfHolding_percentage(_ context.Context
 	return graphql.NewScalarFieldContext("EtfHolding", field, false, false, errors.New("field of type Decimal does not have child fields"))
 }
 
+func (ec *executionContext) _HistoricalPricePoint_date(ctx context.Context, field graphql.CollectedField, obj *model.HistoricalPricePoint) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HistoricalPricePoint_date(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Date, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_HistoricalPricePoint_date(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("HistoricalPricePoint", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _HistoricalPricePoint_open(ctx context.Context, field graphql.CollectedField, obj *model.HistoricalPricePoint) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HistoricalPricePoint_open(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Open, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v scalar.Decimal) graphql.Marshaler {
+			return ec.marshalNDecimal2githubᚗcomᚋjilioᚋgqlgenᚑscalarsᚋscalarᚐDecimal(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_HistoricalPricePoint_open(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("HistoricalPricePoint", field, false, false, errors.New("field of type Decimal does not have child fields"))
+}
+
+func (ec *executionContext) _HistoricalPricePoint_high(ctx context.Context, field graphql.CollectedField, obj *model.HistoricalPricePoint) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HistoricalPricePoint_high(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.High, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v scalar.Decimal) graphql.Marshaler {
+			return ec.marshalNDecimal2githubᚗcomᚋjilioᚋgqlgenᚑscalarsᚋscalarᚐDecimal(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_HistoricalPricePoint_high(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("HistoricalPricePoint", field, false, false, errors.New("field of type Decimal does not have child fields"))
+}
+
+func (ec *executionContext) _HistoricalPricePoint_low(ctx context.Context, field graphql.CollectedField, obj *model.HistoricalPricePoint) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HistoricalPricePoint_low(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Low, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v scalar.Decimal) graphql.Marshaler {
+			return ec.marshalNDecimal2githubᚗcomᚋjilioᚋgqlgenᚑscalarsᚋscalarᚐDecimal(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_HistoricalPricePoint_low(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("HistoricalPricePoint", field, false, false, errors.New("field of type Decimal does not have child fields"))
+}
+
+func (ec *executionContext) _HistoricalPricePoint_close(ctx context.Context, field graphql.CollectedField, obj *model.HistoricalPricePoint) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HistoricalPricePoint_close(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Close, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v scalar.Decimal) graphql.Marshaler {
+			return ec.marshalNDecimal2githubᚗcomᚋjilioᚋgqlgenᚑscalarsᚋscalarᚐDecimal(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_HistoricalPricePoint_close(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("HistoricalPricePoint", field, false, false, errors.New("field of type Decimal does not have child fields"))
+}
+
 func (ec *executionContext) _Query_assets(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1209,6 +1474,49 @@ func (ec *executionContext) _StockAsset_livePrice(ctx context.Context, field gra
 }
 func (ec *executionContext) fieldContext_StockAsset_livePrice(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("StockAsset", field, false, false, errors.New("field of type Decimal does not have child fields"))
+}
+
+func (ec *executionContext) _StockAsset_priceHistory(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_StockAsset_priceHistory(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PriceHistory, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.HistoricalPricePoint) graphql.Marshaler {
+			return ec.marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePointᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_StockAsset_priceHistory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "StockAsset",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_HistoricalPricePoint(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_StockAsset_priceHistory_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
 }
 
 func (ec *executionContext) _StockAsset_isin(ctx context.Context, field graphql.CollectedField, obj *model.StockAsset) (ret graphql.Marshaler) {
@@ -2439,6 +2747,11 @@ func (ec *executionContext) _EtfAsset(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "priceHistory":
+			out.Values[i] = ec._EtfAsset_priceHistory(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "isin":
 			out.Values[i] = ec._EtfAsset_isin(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -2552,6 +2865,64 @@ func (ec *executionContext) _EtfHolding(ctx context.Context, sel ast.SelectionSe
 			}
 		case "percentage":
 			out.Values[i] = ec._EtfHolding_percentage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var historicalPricePointImplementors = []string{"HistoricalPricePoint"}
+
+func (ec *executionContext) _HistoricalPricePoint(ctx context.Context, sel ast.SelectionSet, obj *model.HistoricalPricePoint) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, historicalPricePointImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("HistoricalPricePoint")
+		case "date":
+			out.Values[i] = ec._HistoricalPricePoint_date(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "open":
+			out.Values[i] = ec._HistoricalPricePoint_open(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "high":
+			out.Values[i] = ec._HistoricalPricePoint_high(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "low":
+			out.Values[i] = ec._HistoricalPricePoint_low(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "close":
+			out.Values[i] = ec._HistoricalPricePoint_close(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -2692,6 +3063,11 @@ func (ec *executionContext) _StockAsset(ctx context.Context, sel ast.SelectionSe
 			}
 		case "livePrice":
 			out.Values[i] = ec._StockAsset_livePrice(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "priceHistory":
+			out.Values[i] = ec._StockAsset_priceHistory(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -3240,6 +3616,32 @@ func (ec *executionContext) marshalNEtfHolding2ᚖgithubᚗcomᚋjulianahrensᚋ
 		return graphql.Null
 	}
 	return ec._EtfHolding(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNHistoricalPricePoint2ᚕᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePointᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.HistoricalPricePoint) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNHistoricalPricePoint2ᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePoint(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNHistoricalPricePoint2ᚖgithubᚗcomᚋjulianahrensᚋbalanceraybackendᚋinternalᚋgraphᚋmodelᚐHistoricalPricePoint(ctx context.Context, sel ast.SelectionSet, v *model.HistoricalPricePoint) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._HistoricalPricePoint(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {

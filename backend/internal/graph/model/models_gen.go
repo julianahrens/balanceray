@@ -20,6 +20,7 @@ type Asset interface {
 	GetCurrency() string
 	GetAssetClass() AssetClass
 	GetLivePrice() scalar.Decimal
+	GetPriceHistory() []*HistoricalPricePoint
 }
 
 type EtfAsset struct {
@@ -29,6 +30,7 @@ type EtfAsset struct {
 	Currency          string                  `json:"currency"`
 	AssetClass        AssetClass              `json:"assetClass"`
 	LivePrice         scalar.Decimal          `json:"livePrice"`
+	PriceHistory      []*HistoricalPricePoint `json:"priceHistory"`
 	Isin              *string                 `json:"isin,omitempty"`
 	Wkn               *string                 `json:"wkn,omitempty"`
 	Issuer            *string                 `json:"issuer,omitempty"`
@@ -44,6 +46,16 @@ func (this EtfAsset) GetName() string              { return this.Name }
 func (this EtfAsset) GetCurrency() string          { return this.Currency }
 func (this EtfAsset) GetAssetClass() AssetClass    { return this.AssetClass }
 func (this EtfAsset) GetLivePrice() scalar.Decimal { return this.LivePrice }
+func (this EtfAsset) GetPriceHistory() []*HistoricalPricePoint {
+	if this.PriceHistory == nil {
+		return nil
+	}
+	interfaceSlice := make([]*HistoricalPricePoint, 0, len(this.PriceHistory))
+	for _, concrete := range this.PriceHistory {
+		interfaceSlice = append(interfaceSlice, concrete)
+	}
+	return interfaceSlice
+}
 
 type EtfCountryAllocation struct {
 	CountryCode string         `json:"countryCode"`
@@ -55,20 +67,29 @@ type EtfHolding struct {
 	Percentage scalar.Decimal `json:"percentage"`
 }
 
+type HistoricalPricePoint struct {
+	Date  string         `json:"date"`
+	Open  scalar.Decimal `json:"open"`
+	High  scalar.Decimal `json:"high"`
+	Low   scalar.Decimal `json:"low"`
+	Close scalar.Decimal `json:"close"`
+}
+
 type Query struct {
 }
 
 type StockAsset struct {
-	ID          uuid.UUID      `json:"id"`
-	Symbol      string         `json:"symbol"`
-	Name        string         `json:"name"`
-	Currency    string         `json:"currency"`
-	AssetClass  AssetClass     `json:"assetClass"`
-	LivePrice   scalar.Decimal `json:"livePrice"`
-	Isin        *string        `json:"isin,omitempty"`
-	Wkn         *string        `json:"wkn,omitempty"`
-	Issuer      *string        `json:"issuer,omitempty"`
-	CountryCode string         `json:"countryCode"`
+	ID           uuid.UUID               `json:"id"`
+	Symbol       string                  `json:"symbol"`
+	Name         string                  `json:"name"`
+	Currency     string                  `json:"currency"`
+	AssetClass   AssetClass              `json:"assetClass"`
+	LivePrice    scalar.Decimal          `json:"livePrice"`
+	PriceHistory []*HistoricalPricePoint `json:"priceHistory"`
+	Isin         *string                 `json:"isin,omitempty"`
+	Wkn          *string                 `json:"wkn,omitempty"`
+	Issuer       *string                 `json:"issuer,omitempty"`
+	CountryCode  string                  `json:"countryCode"`
 }
 
 func (StockAsset) IsAsset()                          {}
@@ -78,6 +99,16 @@ func (this StockAsset) GetName() string              { return this.Name }
 func (this StockAsset) GetCurrency() string          { return this.Currency }
 func (this StockAsset) GetAssetClass() AssetClass    { return this.AssetClass }
 func (this StockAsset) GetLivePrice() scalar.Decimal { return this.LivePrice }
+func (this StockAsset) GetPriceHistory() []*HistoricalPricePoint {
+	if this.PriceHistory == nil {
+		return nil
+	}
+	interfaceSlice := make([]*HistoricalPricePoint, 0, len(this.PriceHistory))
+	for _, concrete := range this.PriceHistory {
+		interfaceSlice = append(interfaceSlice, concrete)
+	}
+	return interfaceSlice
+}
 
 type AssetClass string
 

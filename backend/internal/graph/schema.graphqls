@@ -6,6 +6,16 @@ enum AssetClass {
   ETF
 }
 
+# Historical price point for charting and performance calculations
+type HistoricalPricePoint {
+  date: String!
+  open: Decimal!
+  high: Decimal!
+  low: Decimal!
+  close: Decimal!
+}
+
+# The core interface shared by all tradeable financial instruments
 interface Asset {
   id: UUID!
   symbol: String!
@@ -13,18 +23,24 @@ interface Asset {
   currency: String!
   assetClass: AssetClass!
   livePrice: Decimal!
+
+  # Fetches historical price points based on a timeframe (e.g., "1Y", "MAX")
+  priceHistory(timeframe: String!): [HistoricalPricePoint!]!
 }
 
+# Represents a constituent asset inside an ETF pool
 type EtfHolding {
   asset: Asset!
   percentage: Decimal!
 }
 
+# Represents the geographical asset exposure provided by the fund manager
 type EtfCountryAllocation {
   countryCode: String!
   percentage: Decimal!
 }
 
+# Specific type for individual equities
 type StockAsset implements Asset {
   id: UUID!
   symbol: String!
@@ -32,14 +48,18 @@ type StockAsset implements Asset {
   currency: String!
   assetClass: AssetClass!
   livePrice: Decimal!
+  priceHistory(timeframe: String!): [HistoricalPricePoint!]!
 
+  # Security metadata
   isin: String
   wkn: String
   issuer: String
 
+  # The home country code of the underlying corporation (ISO 2-letter format)
   countryCode: String!
 }
 
+# Specific type for Exchange Traded Funds
 type EtfAsset implements Asset {
   id: UUID!
   symbol: String!
@@ -47,12 +67,15 @@ type EtfAsset implements Asset {
   currency: String!
   assetClass: AssetClass!
   livePrice: Decimal!
+  priceHistory(timeframe: String!): [HistoricalPricePoint!]!
 
+  # Security metadata
   isin: String
   wkn: String
   issuer: String
   providerProductId: String
 
+  # Look-through metrics for transparent allocation mapping
   holdings: [EtfHolding!]!
   countries: [EtfCountryAllocation!]!
 }
