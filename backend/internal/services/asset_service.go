@@ -5,41 +5,101 @@ import (
 	"database/sql"
 	"fmt"
 
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/google/uuid"
 	"github.com/jilio/gqlgen-scalars/scalar"
 	"github.com/julianahrens/balanceray/backend/internal/graph/model"
 	"github.com/julianahrens/balanceray/backend/internal/repository/db"
+	"github.com/pariz/gountries"
 	"github.com/shopspring/decimal"
 )
 
 type AssetService struct {
-	store db.Store // Das von sqlc generierte DB-Interface (erfordert 'emit_interface: true')
-	rawDB *sql.DB  // Benötigt für das Initiieren von Transaktionen
+	store db.Store
+	rawDB *sql.DB
+	query *gountries.Query // ISO 3166 Query Client
 }
 
 func NewAssetService(rawDB *sql.DB, store db.Store) *AssetService {
 	return &AssetService{
 		store: store,
 		rawDB: rawDB,
+		query: gountries.New(),
 	}
+}
+
+// Custom validation rule to verify real ISO 3166-1 alpha-2 countries
+func (s *AssetService) isRealISOCountry(value interface{}) error {
+	var str string
+
+	// Handle both direct strings and string pointers safely
+	switch v := value.(type) {
+	case string:
+		str = v
+	case *string:
+		if v != nil {
+			str = *v
+		}
+	default:
+		return nil // Field is not a string type, let other rules handle it
+	}
+
+	if str == "" {
+		return nil // Let 'validation.Required' handle blank checks
+	}
+
+	// Now we have the actual string value to check against the official ISO data
+	_, err := s.query.FindCountryByAlpha(str)
+	if err != nil {
+		return fmt.Errorf("must be a valid ISO 3166-1 alpha-2 country code")
+	}
+	return nil
+}
+
+// ValidateInput uses type-safe code rules instead of magic string struct tags
+func (s *AssetService) ValidateInput(input model.CreateAssetInput) error {
+	err := validation.ValidateStruct(&input,
+		validation.Field(&input.Symbol, validation.Required, validation.Length(1, 10)),
+		validation.Field(&input.Name, validation.Required, validation.Length(2, 100)),
+		validation.Field(&input.Currency, validation.Required, validation.Length(3, 3), is.Alpha),
+		validation.Field(&input.Isin, validation.NilOrNotEmpty, validation.Length(12, 12)),
+		validation.Field(&input.Wkn, validation.NilOrNotEmpty, validation.Length(6, 6)),
+	)
+	if err != nil {
+		return fmt.Errorf("base asset validation failed: %w", err)
+	}
+
+	switch input.AssetClass {
+	case model.AssetClassStock:
+		return validation.ValidateStruct(&input,
+			validation.Field(&input.CountryCode, validation.Required, validation.Length(2, 2), is.Alpha, validation.By(s.isRealISOCountry)),
+		)
+	case model.AssetClassEtf:
+		if input.CountryCode != nil && *input.CountryCode != "" {
+			return fmt.Errorf("ETFs cannot be assigned a single country code")
+		}
+	}
+
+	return nil
 }
 
 // CreateAsset executes a polymorphic database transaction to insert an asset and its subclass extension
 func (s *AssetService) CreateAsset(ctx context.Context, input model.CreateAssetInput) (db.Asset, error) {
 	var createdAsset db.Asset
 
-	// 1. Start explicit SQL transaction
+	if err := s.ValidateInput(input); err != nil {
+		return createdAsset, err
+	}
+
 	tx, err := s.rawDB.BeginTx(ctx, nil)
 	if err != nil {
 		return createdAsset, fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	// Ensure rollback happens if any subsequent step panics or returns an error
 	defer tx.Rollback()
 
-	// 2. Bind the sqlc Queries to our active transaction instance
 	qtx := s.store.WithTx(tx)
 
-	// 3. Map values to sqlc Base Asset params
 	var dbAssetClass db.AssetClass
 	switch input.AssetClass {
 	case model.AssetClassStock:
@@ -51,7 +111,6 @@ func (s *AssetService) CreateAsset(ctx context.Context, input model.CreateAssetI
 	}
 
 	dec, _ := decimal.NewFromString("0.0000")
-	// 4. Insert into core 'assets' table
 	createdAsset, err = qtx.CreateBaseAsset(ctx, db.CreateBaseAssetParams{
 		Symbol:     input.Symbol,
 		Name:       input.Name,
@@ -63,7 +122,6 @@ func (s *AssetService) CreateAsset(ctx context.Context, input model.CreateAssetI
 		return createdAsset, fmt.Errorf("failed to create base asset: %w", err)
 	}
 
-	// 5. Handle Polymorphic Polymorph / Child Extensions
 	switch dbAssetClass {
 	case db.AssetClassSTOCK:
 		if input.CountryCode == nil || *input.CountryCode == "" {
@@ -92,7 +150,6 @@ func (s *AssetService) CreateAsset(ctx context.Context, input model.CreateAssetI
 		return createdAsset, fmt.Errorf("failed to create asset subclass extension: %w", err)
 	}
 
-	// 6. Commit the entire transaction atomically
 	if err := tx.Commit(); err != nil {
 		return createdAsset, fmt.Errorf("failed to commit transaction: %w", err)
 	}

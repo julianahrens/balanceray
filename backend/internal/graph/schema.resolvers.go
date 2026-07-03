@@ -18,8 +18,7 @@ func (r *mutationResolver) CreateAsset(ctx context.Context, input model.CreateAs
 	// 1. Call our transaction-safe Service Layer
 	dbAsset, err := r.Resolver.AssetService.CreateAsset(ctx, input)
 	if err != nil {
-		// GraphQL execution error returned safely to the SvelteKit frontend
-		return nil, fmt.Errorf("failed to create asset: %w", err)
+		return nil, PresentValidationError(ctx, err)
 	}
 
 	// 2. Fetch the specific extension from DB to fulfill the full GraphQL type contract

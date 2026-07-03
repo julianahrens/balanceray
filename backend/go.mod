@@ -6,16 +6,19 @@ tool github.com/99designs/gqlgen
 
 require (
 	github.com/99designs/gqlgen v0.17.93
+	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/google/uuid v1.6.0
 	github.com/jilio/gqlgen-scalars v0.3.0
 	github.com/lib/pq v1.12.3
+	github.com/pariz/gountries v0.1.6
 	github.com/shopspring/decimal v1.4.0
 	github.com/vektah/gqlparser/v2 v2.5.36
 )
 
 require (
 	github.com/agnivade/levenshtein v1.2.1 // indirect
+	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/coder/websocket v1.8.15 // indirect
 	github.com/ethereum/go-ethereum v1.17.4 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
@@ -29,4 +32,5 @@ require (
 	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
 	golang.org/x/tools v0.47.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
