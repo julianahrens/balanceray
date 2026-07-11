@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package marketdata;
+
+option go_package = "internal/pricing/pb;pb";
+
+service MarketDataService {
+  rpc GetHistoricalOHLC (HistoryRequest) returns (HistoryResponse);
+  rpc GetLiveQuote (QuoteRequest) returns (QuoteResponse);
+  rpc GetAssetMetadata (AssetMetadataRequest) returns (AssetMetadataResponse);
+  rpc GetDividends (DividendsRequest) returns (DividendsResponse);
+}
+
+message HistoryRequest {
+  string symbol = 1;
+  string start_date = 2;
+  string interval = 3;
+}
+
+message OHLCPoint {
+  int64 timestamp = 1;
+  double open = 2;
+  double high = 3;
+  double low = 4;
+  double close = 5;
+  int64 volume = 6;
+}
+
+message HistoryResponse {
+  string symbol = 1;
+  string currency = 2;
+  repeated OHLCPoint candles = 3;
+}
+
+message QuoteRequest {
+  string symbol = 1;
+}
+
+message QuoteResponse {
+  string symbol = 1;
+  double price = 2;
+  string currency = 3;
+  int64 timestamp = 4;
+}
+
+message AssetMetadataRequest {
+  string identifier = 1;
+}
+
+message AssetMetadataResponse {
+  string symbol = 1;
+  optional string isin = 2;
+  optional string wkn = 3;
+  string name = 4;
+  string currency = 5;
+  string quote_type = 6;
+
+  optional string sector = 7;
+  optional string industry = 8;
+  optional string country = 9;
+  optional string summary = 10;
+
+  optional double market_cap = 11;
+  optional double dividend_yield = 12;
+  optional double trailing_pe = 13;
+  optional double fifty_two_week_high = 14;
+  optional double fifty_two_week_low = 15;
+}
+
+message DividendsRequest {
+  string symbol = 1;
+  optional string start_date = 2;
+}
+
+message DividendEvent {
+  int64 ex_date_timestamp = 1;
+  double amount_per_share = 2;
+}
+
+message DividendsResponse {
+  string symbol = 1;
+  repeated DividendEvent events = 2;
+}

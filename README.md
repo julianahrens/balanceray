@@ -41,6 +41,8 @@ The codebase follows a strict domain separation pattern (**Class-Table-Inheritan
 
 This project is organized as a monorepo:
 * `/backend`: The core performance engine and GraphQL API written in Go (highly optimized for batch processing via PostgreSQL).
-* `/frontend`: The interactive dashboard UI built with SvelteKit and Houdini GraphQL.
+* `/frontend`: The interactive dashboard UI built with React.
+* `/sidecars`: The sidecar services that run in parallel to the core engine.
+* `/proto`: Central gRPC schemas (Language-agnostic)
 
 *Technical documentation regarding local setup, database migrations (`sqlc`), and API generation (`gqlgen`/`Houdini`) can be found in the respective README files inside the subdirectories.*

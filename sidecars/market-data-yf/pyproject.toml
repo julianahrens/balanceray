@@ -1,0 +1,13 @@
+[project]
+name = "market-data-yf"
+version = "0.1.0"
+description = "AInternal gRPC sidecar fetching market quotes using yfinance"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "curl-cffi>=0.15.0",
+    "grpcio>=1.82.1",
+    "grpcio-reflection>=1.82.1",
+    "grpcio-tools>=1.82.1",
+    "yfinance>=1.5.1",
+]
